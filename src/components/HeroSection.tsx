@@ -1,5 +1,6 @@
 import { ChevronDown, Github, Linkedin, Mail, User, Zap } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { images } from "./assets";
 
 interface HeroSectionProps {
   scrollToSection: (section: string) => void;
@@ -54,7 +55,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ scrollToSection }) => {
             <div className="relative">
               <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 p-1 animate-pulse">
                 <img
-                  src="src\assets\Image.jpg"
+                  src={images.profilePic}
                   alt="Neha Sharma"
                   className="w-full h-full rounded-full object-cover"
                 />
@@ -66,11 +67,11 @@ const HeroSection: React.FC<HeroSectionProps> = ({ scrollToSection }) => {
           </div>
 
           {/* Greeting */}
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <span className="inline-block px-4 py-2 bg-indigo-500/20 text-indigo-300 rounded-full text-sm font-medium border border-indigo-500/30 mb-6">
               👋 Hello, I'm available for work
             </span>
-          </div>
+          </div> */}
 
           <div className="mb-8">
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-4">

@@ -22,9 +22,8 @@ setFormData({name:'',email:'', message:''})
             <div>
               <h3 className="text-2xl font-semibold text-white mb-6">Get In Touch</h3>
               <p className="text-gray-300 leading-relaxed mb-8">
-                I'm always interested in hearing about new projects and opportunities. 
-                Whether you're a startup looking to build your first product or an 
-                established business needing to modernize, let's discuss how we can work together.
+                Open to collaborations and new opportunities to build meaningful products.
+Feel free to reach out—I’d be happy to connect.
               </p>
             </div>
             
@@ -35,7 +34,7 @@ setFormData({name:'',email:'', message:''})
                 </div>
                 <div>
                   <h4 className="text-white font-medium">Email</h4>
-                  <p className="text-gray-300">alex.johnson@email.com</p>
+                  <p className="text-gray-300">nehashkr@gmail.com</p>
                 </div>
               </div>
               
