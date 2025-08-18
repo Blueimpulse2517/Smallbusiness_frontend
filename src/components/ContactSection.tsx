@@ -44,7 +44,7 @@ Feel free to reach out—I’d be happy to connect.
                 </div>
                 <div>
                   <h4 className="text-white font-medium">Phone</h4>
-                  <p className="text-gray-300">+1 (555) 123-4567</p>
+                  <p className="text-gray-300">9036306889</p>
                 </div>
               </div>
               
@@ -54,7 +54,7 @@ Feel free to reach out—I’d be happy to connect.
                 </div>
                 <div>
                   <h4 className="text-white font-medium">Location</h4>
-                  <p className="text-gray-300">San Francisco, CA</p>
+                  <p className="text-gray-300">Bangalore, Karnataka</p>
                 </div>
               </div>
             </div>
