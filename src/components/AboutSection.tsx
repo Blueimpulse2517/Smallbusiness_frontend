@@ -69,8 +69,6 @@ const AboutSection = () => {
               </h3>
               <ul className="space-y-2 text-gray-300">
                 <li>• Led team of 5 developers on enterprise project</li>
-                <li>• Published 3 open-source React libraries</li>
-                <li>• Speaker at 2 tech conferences</li>
                 <li>• 50+ successful project deliveries</li>
               </ul>
             </div>

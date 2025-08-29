@@ -1,6 +1,7 @@
 import { Mail, MapPin, Phone, Send } from "lucide-react";
 import React, { useState } from "react";
 
+
 const ContactSection = () => {
 
   const [ formData, setFormData] = useState({name:'',email:'',message:''})
@@ -14,7 +15,7 @@ setFormData({name:'',email:'', message:''})
   return (
      <section id="contact" className="py-20 px-4">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl font-bold text-center text-white mb-16">Let's Work Together</h2>
+        <h2 className="text-4xl font-bold text-center text-white mb-16">Connect with Us</h2>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact Info */}
@@ -22,8 +23,7 @@ setFormData({name:'',email:'', message:''})
             <div>
               <h3 className="text-2xl font-semibold text-white mb-6">Get In Touch</h3>
               <p className="text-gray-300 leading-relaxed mb-8">
-                Open to collaborations and new opportunities to build meaningful products.
-Feel free to reach out—I’d be happy to connect.
+                We’re happy to answer any questions or hear your feedback. Feel free to reach out to VINTTAGE PARK anytime — we’re here to help!
               </p>
             </div>
             
@@ -34,7 +34,7 @@ Feel free to reach out—I’d be happy to connect.
                 </div>
                 <div>
                   <h4 className="text-white font-medium">Email</h4>
-                  <p className="text-gray-300">nehashkr@gmail.com</p>
+                  <p className="text-gray-300">hotelvinttagepark777@gmail.com</p>
                 </div>
               </div>
               
@@ -44,7 +44,9 @@ Feel free to reach out—I’d be happy to connect.
                 </div>
                 <div>
                   <h4 className="text-white font-medium">Phone</h4>
-                  <p className="text-gray-300">9036306889</p>
+                  <p className="text-gray-300">080-4114 6688, 4128 4888
+
+99644 52777</p>
                 </div>
               </div>
               
@@ -54,7 +56,7 @@ Feel free to reach out—I’d be happy to connect.
                 </div>
                 <div>
                   <h4 className="text-white font-medium">Location</h4>
-                  <p className="text-gray-300">Bangalore, Karnataka</p>
+                  <p className="text-gray-300">#23, 3rd Main Road, (Near Sapna Book House) Gandhinagar, Bengaluru - 560 009.</p>
                 </div>
               </div>
             </div>
@@ -96,7 +98,7 @@ Feel free to reach out—I’d be happy to connect.
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20 transition-all duration-300 resize-none"
-                  placeholder="Tell me about your project..."
+                  placeholder="Have questions about your stay, dining, or bookings? We’re here to help you with anything you need at VINTTAGE PARK."
                   required
                 ></textarea>
               </div>

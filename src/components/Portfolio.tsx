@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import Navigation from './Navigation';
 import HeroSection from './HeroSection';
-import AboutSection from './AboutSection';
-import ExperienceSection from './ExperienceSection';
-import SkillsSection from './SkillsSection';
-import ProjectSection from './ProjectSection';
+import BookingForm from './BookingForm'
+import Rooms from './Rooms';
+import Dishes from './Dishes';
+
+
 import ContactSection from './ContactSection'
 
 
@@ -34,10 +35,13 @@ if(element){
         scrollToSection={scrollToSection}
         />
         <HeroSection   scrollToSection={scrollToSection} />
-        <AboutSection />
-        <ExperienceSection />
-        <SkillsSection />
-        <ProjectSection />
+        
+        <Rooms />
+        <Dishes />
+        <BookingForm />
+        
+  
+        
         <ContactSection />
     </div>
   )
