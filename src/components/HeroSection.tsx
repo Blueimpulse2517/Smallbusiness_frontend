@@ -1,6 +1,6 @@
 import { ChevronDown, Github, Linkedin, Mail, User, Zap } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { images } from "./assets";
+//import { images } from "./assets";
 
 interface HeroSectionProps {
   scrollToSection: (section: string) => void;

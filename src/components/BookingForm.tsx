@@ -1,28 +1,118 @@
-
 import React, { useState } from 'react';
+import axios from 'axios';
 import { Calendar, User, Mail, ChevronDown } from 'lucide-react';
 
 const BookingForm = () => {
-    const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({
     fullName: '',
     email: '',
     checkIn: '',
     checkOut: '',
-    roomType: 'standard'
+    roomType: '', // Default selected
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
+  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  //   const { name, value } = e.target;
+  //   setFormData(prev => ({ ...prev, [name]: value }));
+  // };
+const handleInputChange = (
+  e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+) => {
+  const { name, value } = e.target;
+  
+  // If check-in date is changed, reset check-out date if it's before the new check-in date
+  if (name === 'checkIn' && formData.checkOut && value > formData.checkOut) {
+    setFormData(prev => ({ ...prev, [name]: value, checkOut: '' }));
+  } else {
     setFormData(prev => ({ ...prev, [name]: value }));
+  }
+};
+
+  const baseUrl = "http://localhost:5000";
+const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Validate dates
+    if (formData.checkIn && formData.checkOut && formData.checkIn >= formData.checkOut) {
+      alert("❌ Check-out date must be after check-in date. Please select valid dates.");
+      return;
+    }
+    
+    // Create booking message
+    const bookingMessage = `
+🏨 HOTEL BOOKING CONFIRMATION 🏨
+
+Dear ${formData.fullName},
+
+Thank you for choosing our hotel! Your booking has been confirmed.
+
+📋 BOOKING DETAILS:
+• Name: ${formData.fullName}
+• Email: ${formData.email}
+• Check-in Date: ${formData.checkIn}
+• Check-out Date: ${formData.checkOut}
+• Room Type: ${formData.roomType}
+
+We look forward to welcoming you to our hotel!
+
+Best regards,
+Hotel Management Team
+    `;
+    
+    const emailData = {
+      email: formData.email,
+      subject: "Hotel Booking Confirmation",
+      message: bookingMessage,
+      bookingDetails: {
+        fullName: formData.fullName,
+        email: formData.email,
+        checkIn: formData.checkIn,
+        checkOut: formData.checkOut,
+        roomType: formData.roomType
+      }
+    };
+    
+    try {
+      const res = await fetch(`${baseUrl}/email/handleSubmit`, {
+        method: "POST",
+        body: JSON.stringify(emailData),
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+      
+      const responseData = await res.json();
+      
+      if (res.status >= 200 && res.status < 300) {
+        if (responseData.customerEmailSent && responseData.adminEmailSent) {
+          alert("🎉 Booked Successfully! 🎉\n\n✅ Confirmation email sent to you\n✅ Owner notification sent\n\nYour booking has been confirmed!");
+        } else if (responseData.customerEmailSent) {
+          alert("🎉 Booked Successfully! 🎉\n\n✅ Confirmation email sent to you\n⚠️ Owner notification failed - please contact hotel directly\n\nYour booking has been confirmed!");
+        } else if (responseData.adminEmailSent) {
+          alert("🎉 Booked Successfully! 🎉\n\n⚠️ Confirmation email failed - please check your email address\n✅ Owner has been notified\n\nYour booking has been confirmed!");
+        } else {
+          alert("🎉 Booked Successfully! 🎉\n\n⚠️ Email notifications failed - please contact hotel directly\n\nYour booking has been confirmed!");
+        }
+        
+        // Reset form
+        setFormData({
+          fullName: '',
+          email: '',
+          checkIn: '',
+          checkOut: '',
+          roomType: '',
+        });
+      } else {
+        alert(`❌ Error submitting booking: ${responseData.message || 'Please try again.'}`);
+      }
+    } catch (error) {
+      console.error('Booking error:', error);
+      alert("Error submitting booking. Please check your connection and try again.");
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Booking data:', formData);
-    alert('Booking request submitted! We will contact you soon.');
-  };
   return (
-   
     <section id="booking" className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
@@ -41,8 +131,8 @@ const BookingForm = () => {
                   id="fullName"
                   name="fullName"
                   value={formData.fullName}
-                  onChange={handleInputChange}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
+  onChange={handleInputChange}
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 text-gray-900"
                   placeholder="Enter your full name"
                   required
                 />
@@ -61,7 +151,7 @@ const BookingForm = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 text-gray-900"
                   placeholder="Enter your email"
                   required
                 />
@@ -81,7 +171,8 @@ const BookingForm = () => {
                     name="checkIn"
                     value={formData.checkIn}
                     onChange={handleInputChange}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
+                    min={new Date().toISOString().split('T')[0]}
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 text-gray-900"
                     required
                   />
                 </div>
@@ -99,12 +190,22 @@ const BookingForm = () => {
                     name="checkOut"
                     value={formData.checkOut}
                     onChange={handleInputChange}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
+                    min={formData.checkIn || new Date().toISOString().split('T')[0]}
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 text-gray-900"
                     required
                   />
                 </div>
               </div>
             </div>
+            
+            {/* <div className="text-sm text-gray-600 bg-blue-50 p-3 rounded-lg">
+              <p className="font-medium text-blue-800 mb-1">📅 Date Selection Guidelines:</p>
+              <ul className="text-blue-700 space-y-1">
+                <li>• Check-in date must be today or in the future</li>
+                <li>• Check-out date must be after check-in date</li>
+                <li>• Past dates are automatically disabled</li>
+              </ul>
+            </div> */}
 
             <div>
               <label htmlFor="roomType" className="block text-sm font-medium text-gray-700 mb-2">
@@ -116,7 +217,7 @@ const BookingForm = () => {
                   name="roomType"
                   value={formData.roomType}
                   onChange={handleInputChange}
-                  className="w-full pl-4 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 appearance-none bg-white"
+                  className="w-full pl-4 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 appearance-none bg-white text-gray-900"
                 >
                   <option value="standard">Standard</option>
                   <option value="deluxe">Deluxe</option>
@@ -137,7 +238,7 @@ const BookingForm = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default BookingForm
+export default BookingForm;

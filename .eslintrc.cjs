@@ -17,5 +17,7 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    // ✅ Added rule to suppress unused React import warning
+    'no-unused-vars': ['warn', { varsIgnorePattern: '^React$' }],
   },
 }

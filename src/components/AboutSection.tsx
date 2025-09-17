@@ -18,11 +18,9 @@ const AboutSection = () => {
                 Who am i?
               </h3>
               <p className="text-gray-300 leading-relaxed">
-                I'm a passionate full-stack developer with 3+ years of
-                experience creating digital solutions that combine beautiful
-                design with powerful functionality. I specialize in HTML, CSS,
-                javaScript, typeScript, React, Angular, Node.js, AWS, DynamoDb and modern web
-                technologies.
+                Vinttage Park Hotel is a stylish and comfortable place to stay for both business and leisure travelers. We offer well-designed rooms, modern facilities, and friendly service to make every guest feel at home.
+
+Our goal is to provide a relaxing and enjoyable experience with a mix of classic charm and modern comfort..
               </p>
             </div>
 
@@ -32,10 +30,7 @@ const AboutSection = () => {
                 What I do?
               </h3>
               <p className="text-gray-300 leading-relaxed">
-                I build responsive web applications, mobile apps, and user
-                interfaces that prioritize performance, accessibility, and user
-                experience. From concept to deployment, I handle the entire
-                development lifecycle.
+                At Vinttage Park Hotel, we focus on delivering a seamless and comfortable experience for every guest. From check-in to check-out, every detail is thoughtfully designed to ensure convenience, accessibility, and satisfaction. Whether you're here for business or leisure, we take care of everything to make your stay effortless and enjoyable.
               </p>
             </div>
           </div>
