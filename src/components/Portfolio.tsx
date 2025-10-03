@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Navigation from './Navigation';
 import HeroSection from './HeroSection';
+import Video from './video';
 import BookingForm from './BookingForm'
 import Rooms from './Rooms';
 import Dishes from './Dishes';
@@ -35,6 +36,7 @@ if(element){
         scrollToSection={scrollToSection}
         />
         <HeroSection   scrollToSection={scrollToSection} />
+      <Video />
         
         <Rooms />
         <Dishes />

@@ -44,7 +44,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
 Dear ${formData.fullName},
 
-Thank you for choosing our hotel! Your booking has been confirmed.
+Room booking initiated, Hotel will call back to confirm Availability
 
 📋 BOOKING DETAILS:
 • Name: ${formData.fullName}

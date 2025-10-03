@@ -62,8 +62,8 @@ setFormData({name:'',email:'', message:''})
             </div>
           </div>
           
-          {/* Contact Form */}
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20">
+         
+          {/* <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20">
             <h3 className="text-2xl font-semibold text-white mb-6">Send a Message</h3>
             
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -111,7 +111,7 @@ setFormData({name:'',email:'', message:''})
                 <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
               </button>
             </form>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>
