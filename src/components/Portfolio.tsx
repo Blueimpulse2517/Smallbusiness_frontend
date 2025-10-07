@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Navigation from './Navigation';
 import HeroSection from './HeroSection';
-import Video from './video';
+import Video from './Video';
 import BookingForm from './BookingForm'
 import Rooms from './Rooms';
 import Dishes from './Dishes';
