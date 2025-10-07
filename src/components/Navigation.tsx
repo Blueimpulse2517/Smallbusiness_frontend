@@ -1,48 +1,48 @@
 import React, { useState } from 'react';
-import { Menu, X, Hotel } from 'lucide-react';
-
+import { Menu, X } from 'lucide-react'; // Removed Hotel icon
 
 interface NavigationProps {
-  isMenuOpen: boolean;
-  setIsMenuOpen: (open: boolean) => void;
-  activeSection: string;
   scrollToSection: (section: string) => void;
 }
 
-const Navigation: React.FC<NavigationProps> = ({
-  
-}) => {
+const Navigation: React.FC<NavigationProps> = ({ scrollToSection }) => {
   const [isOpen, setIsOpen] = useState(false);
-
   const toggleMenu = () => setIsOpen(!isOpen);
-  const navItems = ['Home', 'Rooms', 'Dining',  'Contact'];
+  const navItems = ['Home', 'Rooms', 'Dining', 'Contact'];
 
   return (
     <nav className="bg-white shadow-lg sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <Hotel className="h-8 w-8 text-blue-700" />
-            <span className="text-xl font-bold text-gray-900">VINTTAGE PARK</span>
-          </div>
+          {/* Removed Logo */}
 
           {/* Desktop Navigation */}
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-8">
-              {navItems.map((item) => (
-                <a
-                  key={item}
-                  href={`#${item.toLowerCase()}`}
-                  className="text-gray-700 hover:text-blue-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 hover:bg-blue-50"
-                >
-                  {item}
-                </a>
-              ))}
-              {/* <button className="bg-blue-700 text-white px-6 py-2 rounded-full font-medium hover:bg-blue-800 transition-colors duration-200">
-                Book Now
-              </button> */}
-            </div>
+          <div className="hidden md:flex items-center space-x-8">
+            {navItems.map((item) => (
+              <a
+                key={item}
+                href={`#${item.toLowerCase()}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection(item.toLowerCase());
+                  setIsOpen(false);
+                }}
+                className="text-gray-700 hover:text-blue-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 hover:bg-blue-50"
+              >
+                {item}
+              </a>
+            ))}
+            <a
+              href="#booking"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection('booking');
+                setIsOpen(false);
+              }}
+              className="bg-blue-700 text-white px-6 py-2 rounded-full font-medium hover:bg-blue-800 transition-colors duration-200"
+            >
+              Book Now
+            </a>
           </div>
 
           {/* Mobile menu button */}
@@ -64,15 +64,27 @@ const Navigation: React.FC<NavigationProps> = ({
                 <a
                   key={item}
                   href={`#${item.toLowerCase()}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection(item.toLowerCase());
+                    setIsOpen(false);
+                  }}
                   className="text-gray-700 hover:text-blue-700 block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-50 transition-colors duration-200"
-                  onClick={() => setIsOpen(false)}
                 >
                   {item}
                 </a>
               ))}
-              <button className="w-full bg-blue-700 text-white px-6 py-2 rounded-full font-medium hover:bg-blue-800 transition-colors duration-200 mt-4">
+              <a
+                href="#booking"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection('booking');
+                  setIsOpen(false);
+                }}
+                className="block text-center bg-blue-700 text-white px-6 py-2 rounded-full font-medium hover:bg-blue-800 transition-colors duration-200 mt-4"
+              >
                 Book Now
-              </button>
+              </a>
             </div>
           </div>
         )}
