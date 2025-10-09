@@ -8,13 +8,24 @@ interface HeroSectionProps {
 const HeroSection: React.FC<HeroSectionProps> = ({ scrollToSection }) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen(!isOpen);
-  const navItems = ["Home", "Rooms", "Dining", "Contact"];
+  const navItems = ["Home", "Rooms", "Instagram Videos","Dining", "Contact"];
 
   return (
     <section className="bg-gradient-to-r from-rose-400 to-fuchsia-500 text-white py-6">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Hotel Name */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-wide">
+            VINTTAGE PARK
+          </h1>
+          <p className="mt-2 text-lg md:text-xl font-light">
+            Experience comfort & luxury in the heart of nature
+          </p>
+        </div>
+
         {/* Navigation inside hero */}
         <div className="flex justify-between items-center mb-6">
+          {/* Desktop Nav */}
           <div className="hidden md:flex space-x-6 items-center">
             {navItems.map((item) => (
               <a
@@ -30,6 +41,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ scrollToSection }) => {
                 {item}
               </a>
             ))}
+
+            {/* Book Now */}
             <a
               href="#booking"
               onClick={(e) => {
@@ -41,8 +54,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ scrollToSection }) => {
             >
               Book Now
             </a>
+
+            {/* WhatsApp Icon Button */}
             <a
-              href="https://wa.me/919876543210?text=Hello%20VINTTAGE%20PARK%2C%20I%20want%20to%20book%20a%20room"
+              href="https://wa.me/919845361085?text=Hello%20VINTTAGE%20PARK%2C%20I%20want%20to%20book%20a%20room"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-full transition duration-200"
@@ -59,7 +74,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ scrollToSection }) => {
             </a>
           </div>
 
-          {/* Mobile menu button */}
+          {/* Mobile Menu Button */}
           <div className="md:hidden">
             <button
               onClick={toggleMenu}
@@ -70,7 +85,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ scrollToSection }) => {
           </div>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Menu */}
         {isOpen && (
           <div className="md:hidden mb-6">
             <div className="space-y-2 bg-pink-300 p-4 rounded-md">
@@ -88,6 +103,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ scrollToSection }) => {
                   {item}
                 </a>
               ))}
+
+              {/* Book Now */}
               <a
                 href="#booking"
                 onClick={(e) => {
@@ -99,8 +116,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ scrollToSection }) => {
               >
                 Book Now
               </a>
+
+              {/* WhatsApp Button */}
               <a
-                href="https://wa.me/919876543210?text=Hello%20VINTTAGE%20PARK%2C%20I%20want%20to%20book%20a%20room"
+                href="https://wa.me/919845361085?text=Hello%20VINTTAGE%20PARK%2C%20I%20want%20to%20book%20a%20room"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block text-center bg-green-500 text-white p-2 rounded-full hover:bg-green-600 transition duration-200"

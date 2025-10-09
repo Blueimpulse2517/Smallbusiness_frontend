@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { Calendar, User, Mail, ChevronDown } from 'lucide-react';
 
 const BookingForm = () => {
@@ -8,37 +7,33 @@ const BookingForm = () => {
     email: '',
     checkIn: '',
     checkOut: '',
-    roomType: '', // Default selected
+    roomType: '',
   });
 
-  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-  //   const { name, value } = e.target;
-  //   setFormData(prev => ({ ...prev, [name]: value }));
-  // };
-const handleInputChange = (
-  e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-) => {
-  const { name, value } = e.target;
-  
-  // If check-in date is changed, reset check-out date if it's before the new check-in date
-  if (name === 'checkIn' && formData.checkOut && value > formData.checkOut) {
-    setFormData(prev => ({ ...prev, [name]: value, checkOut: '' }));
-  } else {
-    setFormData(prev => ({ ...prev, [name]: value }));
-  }
-};
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+
+    // If check-in date changes, reset check-out if it's before new check-in
+    if (name === 'checkIn' && formData.checkOut && value > formData.checkOut) {
+      setFormData(prev => ({ ...prev, [name]: value, checkOut: '' }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
+  };
 
   const baseUrl = "http://localhost:5000";
-const handleSubmit = async (e: React.FormEvent) => {
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validate dates
     if (formData.checkIn && formData.checkOut && formData.checkIn >= formData.checkOut) {
       alert("❌ Check-out date must be after check-in date. Please select valid dates.");
       return;
     }
-    
-    // Create booking message
+
     const bookingMessage = `
 🏨 HOTEL BOOKING CONFIRMATION 🏨
 
@@ -58,7 +53,7 @@ We look forward to welcoming you to our hotel!
 Best regards,
 Hotel Management Team
     `;
-    
+
     const emailData = {
       email: formData.email,
       subject: "Hotel Booking Confirmation",
@@ -71,7 +66,7 @@ Hotel Management Team
         roomType: formData.roomType
       }
     };
-    
+
     try {
       const res = await fetch(`${baseUrl}/email/handleSubmit`, {
         method: "POST",
@@ -81,10 +76,18 @@ Hotel Management Team
           "Content-Type": "application/json",
         },
       });
-      
-      const responseData = await res.json();
-      
-      if (res.status >= 200 && res.status < 300) {
+
+      let responseData;
+      try {
+        responseData = await res.json();
+      } catch (parseError) {
+        const text = await res.text();
+        console.error("Non-JSON response from server:", text);
+        alert("❌ Server error. Please try again later.");
+        return;
+      }
+
+      if (res.ok) {
         if (responseData.customerEmailSent && responseData.adminEmailSent) {
           alert("🎉 Booked Successfully! 🎉\n\n✅ Confirmation email sent to you\n✅ Owner notification sent\n\nYour booking has been confirmed!");
         } else if (responseData.customerEmailSent) {
@@ -94,7 +97,7 @@ Hotel Management Team
         } else {
           alert("🎉 Booked Successfully! 🎉\n\n⚠️ Email notifications failed - please contact hotel directly\n\nYour booking has been confirmed!");
         }
-        
+
         // Reset form
         setFormData({
           fullName: '',
@@ -131,7 +134,7 @@ Hotel Management Team
                   id="fullName"
                   name="fullName"
                   value={formData.fullName}
-  onChange={handleInputChange}
+                  onChange={handleInputChange}
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 text-gray-900"
                   placeholder="Enter your full name"
                   required
@@ -197,15 +200,6 @@ Hotel Management Team
                 </div>
               </div>
             </div>
-            
-            {/* <div className="text-sm text-gray-600 bg-blue-50 p-3 rounded-lg">
-              <p className="font-medium text-blue-800 mb-1">📅 Date Selection Guidelines:</p>
-              <ul className="text-blue-700 space-y-1">
-                <li>• Check-in date must be today or in the future</li>
-                <li>• Check-out date must be after check-in date</li>
-                <li>• Past dates are automatically disabled</li>
-              </ul>
-            </div> */}
 
             <div>
               <label htmlFor="roomType" className="block text-sm font-medium text-gray-700 mb-2">
