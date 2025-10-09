@@ -1,6 +1,10 @@
 module.exports = {
   root: true,
-  env: { browser: true, es2020: true },
+  env: {
+    browser: true,
+    node: true, // 👈 Add this line
+    es2020: true,
+  },
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
@@ -17,7 +21,6 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
-    // ✅ Added rule to suppress unused React import warning
     'no-unused-vars': ['warn', { varsIgnorePattern: '^React$' }],
   },
 }
