@@ -54,11 +54,27 @@ const Video = () => {
   const videoList = [
     {
       id: 1,
-      url: 'https://www.instagram.com/reel/DN5jeu5EjQ8/',
+      url: 'https://www.instagram.com/reel/DOyCW2Jkoaa/?utm_source=ig_web_copy_link',
     },
     {
       id: 2,
-      url: 'https://www.instagram.com/reel/DN5jeu5EjQ8/',
+      url: 'https://www.instagram.com/reel/DMNLxrkh73l/?utm_source=ig_web_copy_link',
+    },
+    {
+      id: 3,
+      url: 'https://www.instagram.com/reel/DMNMydthFBH/?utm_source=ig_web_copy_link',
+    },
+    {
+      id: 4,
+      url: 'https://www.instagram.com/reel/DOyB-LVkphM/?utm_source=ig_web_copy_link',
+    },
+    {
+      id: 5,
+      url: 'https://www.instagram.com/reel/DLcAPHEBcbY/?utm_source=ig_web_copy_link',
+    },
+    {
+      id: 6,
+      url: 'https://www.instagram.com/reel/DOyB-LVkphM/?utm_source=ig_web_copy_link',
     },
   ];
 
