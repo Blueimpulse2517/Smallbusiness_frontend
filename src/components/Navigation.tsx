@@ -1,100 +1,61 @@
-// Navigation.tsx
 import React from 'react';
 
-const Navigation: React.FC = () => {
-  return null; // Navigation is now handled inside HeroSection
+interface NavigationProps {
+  scrollToSection: (sectionId: string) => void;
+}
+
+const Navigation: React.FC<NavigationProps> = ({ scrollToSection }) => {
+  const navItems = [
+    { label: 'Home', id: 'home' },
+    { label: 'Hotel Rooms', id: 'rooms' },
+    { label: 'Special Dishes', id: 'dishes' },
+    { label: 'Hotel Instagram Videos', id: 'video' },
+    { label: 'Contact', id: 'contact' },
+  ];
+
+  return (
+    <nav className="w-full fixed top-0 z-50 bg-gradient-to-r from-rose-400 to-fuchsia-500 text-white shadow-sm px-4 py-2">
+      <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+        {/* Logo */}
+        {/* <div className="text-lg font-bold tracking-wide">
+          VINTTAGE <span className="text-yellow-200">PARK</span>
+        </div> */}
+
+        {/* Unified Menu for All Screens */}
+        <div className="flex flex-wrap items-center gap-4 text-sm">
+          {navItems.map(({ label, id }) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection(id);
+              }}
+              className="hover:text-blue-100 transition whitespace-nowrap"
+            >
+              {label}
+            </a>
+          ))}
+          <a
+            href="#booking"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection('booking');
+            }}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded-full whitespace-nowrap"
+          >
+            Book Now
+          </a>
+          <a
+            href="/admin-login"
+            className="underline text-sm hover:text-blue-100 whitespace-nowrap"
+          >
+            Admin Login
+          </a>
+        </div>
+      </div>
+    </nav>
+  );
 };
 
 export default Navigation;
-// import React, { useState } from 'react';
-// import { Menu, X } from 'lucide-react';
-
-// interface NavigationProps {
-//   scrollToSection: (section: string) => void;
-// }
-
-// const Navigation: React.FC<NavigationProps> = ({ scrollToSection }) => {
-//   const [isOpen, setIsOpen] = useState(false);
-//   const toggleMenu = () => setIsOpen(!isOpen);
-//   const navItems = ['Home', 'Rooms', 'Dining', 'Contact'];
-
-//   return (
-//     <div className="bg-pink-200 py-4 px-6"> {/* Pink padding container */}
-//       <div className="max-w-7xl mx-auto flex justify-between items-center">
-//         {/* Desktop Navigation */}
-//         <div className="hidden md:flex items-center space-x-8">
-//           {navItems.map((item) => (
-//             <a
-//               key={item}
-//               href={`#${item.toLowerCase()}`}
-//               onClick={(e) => {
-//                 e.preventDefault();
-//                 scrollToSection(item.toLowerCase());
-//                 setIsOpen(false);
-//               }}
-//               className="text-white hover:text-blue-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
-//             >
-//               {item}
-//             </a>
-//           ))}
-//           <a
-//             href="#booking"
-//             onClick={(e) => {
-//               e.preventDefault();
-//               scrollToSection('booking');
-//               setIsOpen(false);
-//             }}
-//             className="bg-blue-700 text-white px-6 py-2 rounded-full font-medium hover:bg-blue-800 transition-colors duration-200"
-//           >
-//             Book Now
-//           </a>
-//         </div>
-
-//         {/* Mobile menu button */}
-//         <div className="md:hidden">
-//           <button
-//             onClick={toggleMenu}
-//             className="text-white hover:text-blue-700 focus:outline-none"
-//           >
-//             {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-//           </button>
-//         </div>
-//       </div>
-
-//       {/* Mobile Navigation */}
-//       {isOpen && (
-//         <div className="md:hidden mt-4">
-//           <div className="space-y-2 bg-pink-100 p-4 rounded-md">
-//             {navItems.map((item) => (
-//               <a
-//                 key={item}
-//                 href={`#${item.toLowerCase()}`}
-//                 onClick={(e) => {
-//                   e.preventDefault();
-//                   scrollToSection(item.toLowerCase());
-//                   setIsOpen(false);
-//                 }}
-//                 className="block text-white hover:text-blue-700 px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
-//               >
-//                 {item}
-//               </a>
-//             ))}
-//             <a
-//               href="#booking"
-//               onClick={(e) => {
-//                 e.preventDefault();
-//                 scrollToSection('booking');
-//                 setIsOpen(false);
-//               }}
-//               className="block text-center bg-blue-700 text-white px-6 py-2 rounded-full font-medium hover:bg-blue-800 transition-colors duration-200 mt-2"
-//             >
-//               Book Now
-//             </a>
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default Navigation;

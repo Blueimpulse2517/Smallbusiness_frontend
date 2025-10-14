@@ -79,10 +79,10 @@ const Video = () => {
   ];
 
   return (
-    <section id="videos" className="py-16 sm:py-20 bg-gray-50">
+  <section id="video" className="py-16 sm:py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-indigo-700 mb-10 sm:mb-12">
-          Instagram Videos
+         Hotel Instagram Videos
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-4xl mx-auto">
           {videoList.map((video) => (

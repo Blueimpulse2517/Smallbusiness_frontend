@@ -1,18 +1,20 @@
-import { useState } from 'react'
-
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-import './App.css'
-import Portfolio from './components/Portfolio'
+// App.tsx
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './App.css';
+import Portfolio from './components/Portfolio';
+import AdminLogin from './components/AdminLogin';
+import AdminDashboard from './components/AdminDashboard';
 
 function App() {
-
   return (
-    <>
-    <Portfolio />
-    
-    </>
-  )
+    <Router>
+      <Routes>
+        <Route path="/" element={<Portfolio />} />
+        <Route path="/admin-login" element={<AdminLogin />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import Navigation from './Navigation';
 import HeroSection from './HeroSection';
-import Video from './Video'; // ✅ Default export assumed
-import BookingForm from './BookingForm';
 import Rooms from './Rooms';
+import InstagramVideo from './InstagramVideo'; // Renamed correctly
 import Dishes from './Dishes';
+import BookingForm from './BookingForm';
 import ContactSection from './ContactSection';
 
 const Portfolio: React.FC = () => {
@@ -13,22 +13,25 @@ const Portfolio: React.FC = () => {
   const scrollToSection = (sectionId: string) => {
     if (sectionId === 'home') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      setActiveSection(sectionId);
-      return;
+    } else {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
     }
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      setActiveSection(sectionId);
-    }
+    setActiveSection(sectionId);
   };
 
   return (
-    <div className="min-h-screen bg-[#0f0c29] text-white"> 
+    <div className="min-h-screen pt-14 bg-[#0f0c29] text-white scroll-smooth">
+      {/* Navigation Bar */}
+      <Navigation scrollToSection={scrollToSection} />
+
+      {/* Website Sections */}
       <HeroSection scrollToSection={scrollToSection} />
       <Rooms />
-      <Video />
-      <Dishes />
+      <Dishes /> {/* Special Dishes */}
+      <InstagramVideo /> {/* Instagram Videos */}
       <BookingForm />
       <ContactSection />
     </div>
@@ -36,4 +39,3 @@ const Portfolio: React.FC = () => {
 };
 
 export default Portfolio;
-
