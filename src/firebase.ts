@@ -5,12 +5,12 @@ import { getStorage } from 'firebase/storage';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyBwrLcQvd-xqEm_QbqdsGkbjVz3sa-iq4I",
+  authDomain: "hotel-management-bdf4e.firebaseapp.com",
+  projectId: "hotel-management-bdf4e",
+  storageBucket: "hotel-management-bdf4e.firebasestorage.app",
+  messagingSenderId: "556722931233",
+  appId: "1:556722931233:web:1710e60d84bceaa21ac560"
 };
 
 const app = initializeApp(firebaseConfig);

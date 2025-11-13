@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Menu, X } from 'lucide-react';
-import { FaWhatsapp } from 'react-icons/fa'; // Make sure react-icons is installed
+import React, { useState } from "react"; 
+import { Menu, X } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 interface NavigationProps {
   scrollToSection: (sectionId: string) => void;
@@ -8,79 +9,98 @@ interface NavigationProps {
 
 const Navigation: React.FC<NavigationProps> = ({ scrollToSection }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const navItems = [
-    { label: 'Home', id: 'home' },
-    { label: 'Hotel Rooms', id: 'rooms' },
-    { label: 'Special Dishes', id: 'dishes' },
-    { label: 'Hotel Instagram Videos', id: 'video' },
-    { label: 'Contact', id: 'contact' },
+    { label: "Home", id: "home" },
+    { label: "Hotel Rooms", id: "rooms" },
+    { label: "Special Dishes", id: "dishes" },
+    { label: "Hotel Instagram Videos", id: "video" },
+    { label: "Contact", id: "contact" },
   ];
 
-  const whatsappNumber = '919876543210'; // Replace with your actual number
+  const whatsappNumber = "911234567898";
+
+  // ✅ Navigate to dashboard if logged in, else login
+  const handleAdminClick = () => {
+    const isAdmin = localStorage.getItem("isAdmin");
+    if (isAdmin === "true") {
+      navigate("/admin-dashboard");
+    } else {
+      navigate("/admin-login");
+    }
+    setIsOpen(false);
+  };
 
   return (
-    <nav className="w-full fixed top-0 z-50 bg-gradient-to-r from-rose-400 to-fuchsia-500 text-white shadow-md">
-      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-        {/* Logo */}
-        {/* <div className="text-xl font-bold tracking-wide">
+    <nav className="w-full fixed top-0 z-50 bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white shadow-md">
+      <div className="max-w-7xl mx-auto px-4 py-1 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4">
+        {/* Left - Logo */}
+        {/* <div className="text-lg font-bold tracking-wide">
           VINTTAGE <span className="text-yellow-200">PARK</span>
         </div> */}
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex space-x-6 items-center text-sm font-medium">
-          {navItems.map(({ label, id }) => (
-            <a
-              key={id}
-              href={`#${id}`}
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection(id);
-              }}
-              className="hover:text-blue-100 transition"
-            >
-              {label}
-            </a>
-          ))}
+        {/* Right - Contact Info + Buttons */}
+        <div className="flex flex-wrap items-center justify-center gap-2 text-xs sm:text-sm font-medium">
+          <span className="whitespace-nowrap">📞 +9198453 61085</span>
+          <span className="whitespace-nowrap">📧 hotelvinttagepark777@gmail.com</span>
+
           <a
             href="#booking"
             onClick={(e) => {
               e.preventDefault();
-              scrollToSection('booking');
+              scrollToSection("booking");
             }}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded-full"
+            className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-3 py-1.5 rounded-full text-xs sm:text-sm shadow-md transition-all"
           >
             Book Now
           </a>
-          <a
-            href="/admin-login"
-            className="underline hover:text-blue-100"
-          >
-            Admin Login
-          </a>
+
           <a
             href={`https://wa.me/${whatsappNumber}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center space-x-1 hover:text-green-300 transition"
+            className="flex items-center space-x-1 bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium shadow-md transition-all"
           >
-            <FaWhatsapp className="w-5 h-5 text-green-400" />
+            <FaWhatsapp className="w-4 h-4 sm:w-5 sm:h-5" />
             <span>WhatsApp</span>
           </a>
-        </div>
 
-        {/* Mobile Toggle Button */}
-        <div className="md:hidden">
-          <button onClick={toggleMenu}>
+          {/* Hamburger for Mobile */}
+          <button onClick={toggleMenu} className="md:hidden focus:outline-none ml-2">
             {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Desktop Menu */}
+      <div className="hidden md:flex justify-center space-x-6 pb-2 text-sm font-medium">
+        {navItems.map(({ label, id }) => (
+          <a
+            key={id}
+            href={`#${id}`}
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection(id);
+            }}
+            className="hover:text-blue-100 transition"
+          >
+            {label}
+          </a>
+        ))}
+
+        <button
+          onClick={handleAdminClick}
+          className="underline hover:text-blue-100 transition"
+        >
+          Admin
+        </button>
+      </div>
+
+      {/* Mobile Dropdown Menu */}
       {isOpen && (
-        <div className="md:hidden px-4 pb-4 space-y-3 text-sm font-medium bg-pink-400 bg-opacity-95 rounded-b-md">
+        <div className="md:hidden px-4 pb-4 space-y-3 text-sm font-medium bg-purple-400 bg-opacity-95 rounded-b-md">
           {navItems.map(({ label, id }) => (
             <a
               key={id}
@@ -95,32 +115,13 @@ const Navigation: React.FC<NavigationProps> = ({ scrollToSection }) => {
               {label}
             </a>
           ))}
-          <a
-            href="#booking"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection('booking');
-              setIsOpen(false);
-            }}
-            className="block bg-blue-600 text-white px-4 py-2 rounded-full text-center hover:bg-blue-700"
+
+          <button
+            onClick={handleAdminClick}
+            className="block w-full text-center underline text-white hover:text-blue-100"
           >
-            Book Now
-          </a>
-          <a
-            href="/admin-login"
-            className="block text-center underline text-white hover:text-blue-100"
-          >
-            Admin Login
-          </a>
-          <a
-            href={`https://wa.me/${+919845361085}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center space-x-2 text-white hover:text-green-300"
-          >
-            <FaWhatsapp className="w-5 h-5 text-green-400" />
-            <span>WhatsApp</span>
-          </a>
+            Admin
+          </button>
         </div>
       )}
     </nav>
@@ -128,3 +129,129 @@ const Navigation: React.FC<NavigationProps> = ({ scrollToSection }) => {
 };
 
 export default Navigation;
+
+// import React, { useState } from "react";
+// import { Menu, X } from "lucide-react";
+// import { FaWhatsapp } from "react-icons/fa";
+
+// interface NavigationProps {
+//   scrollToSection: (sectionId: string) => void;
+// }
+
+// const Navigation: React.FC<NavigationProps> = ({ scrollToSection }) => {
+//   const [isOpen, setIsOpen] = useState(false);
+//   const toggleMenu = () => setIsOpen(!isOpen);
+
+//   const navItems = [
+//     { label: "Home", id: "home" },
+//     { label: "Hotel Rooms", id: "rooms" },
+//     { label: "Special Dishes", id: "dishes" },
+//     { label: "Hotel Instagram Videos", id: "video" },
+//     { label: "Contact", id: "contact" },
+//   ];
+
+//   const whatsappNumber = "91 9845361085";
+
+//   return (
+//     <nav className="w-full fixed top-0 z-50 bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white shadow-md">
+//       <div className="max-w-7xl mx-auto px-4 py-1 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4">
+//         {/* Left - Logo */}
+//         {/* <div className="text-base sm:text-lg font-bold tracking-wide">
+//           VINTTAGE <span className="text-yellow-200">PARK</span>
+//         </div> */}
+
+//         {/* Right - Contact Info + Buttons */}
+//         <div className="flex flex-wrap items-center justify-center gap-2 text-xs sm:text-sm font-medium">
+//           {/* 📞 Contact Number */}
+//           <span className="whitespace-nowrap">📞 +91 98453 61085</span>
+
+//           {/* 📧 Email */}
+//           <span className="whitespace-nowrap">📧 hotelvinttagepark777@gmail.com</span>
+
+//           {/* 🟠 Book Now */}
+//           <a
+//             href="#booking"
+//             onClick={(e) => {
+//               e.preventDefault();
+//               scrollToSection("booking");
+//             }}
+//             className="bg--500 hover:bg-orange-600 text-white font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full text-xs sm:text-sm shadow-md transition-all"
+//           >
+//             Book Now
+//           </a>
+
+//           {/* ✅ WhatsApp Booking */}
+//           <a
+//             href={`https://wa.me/${whatsappNumber}`}
+//             target="_blank"
+//             rel="noopener noreferrer"
+//             className="flex items-center space-x-1 bg-green-500 hover:bg-green-600 text-white px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium shadow-md transition-all"
+//           >
+//             <FaWhatsapp className="w-4 h-4 sm:w-5 sm:h-5" />
+//             <span>WhatsApp</span>
+//           </a>
+
+//           {/* 🍔 Hamburger for Mobile */}
+//           <button
+//             onClick={toggleMenu}
+//             className="md:hidden focus:outline-none ml-2"
+//           >
+//             {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+//           </button>
+//         </div>
+//       </div>
+
+//       {/* ✅ Desktop Menu */}
+//       <div className="hidden md:flex justify-center space-x-6 pb-2 text-sm font-medium">
+//         {navItems.map(({ label, id }) => (
+//           <a
+//             key={id}
+//             href={`#${id}`}
+//             onClick={(e) => {
+//               e.preventDefault();
+//               scrollToSection(id);
+//             }}
+//             className="hover:text-blue-100 transition"
+//           >
+//             {label}
+//           </a>
+//         ))}
+//         <a
+//           href="/admin-login"
+//           className="underline hover:text-blue-100 transition"
+//         >
+//           Admin Login
+//         </a>
+//       </div>
+
+//       {/* ✅ Mobile Dropdown Menu */}
+//       {isOpen && (
+//         <div className="md:hidden px-4 pb-4 space-y-3 text-sm font-medium bg-purple-400 bg-opacity-95 rounded-b-md">
+//           {navItems.map(({ label, id }) => (
+//             <a
+//               key={id}
+//               href={`#${id}`}
+//               onClick={(e) => {
+//                 e.preventDefault();
+//                 scrollToSection(id);
+//                 setIsOpen(false);
+//               }}
+//               className="block text-white hover:text-blue-100"
+//             >
+//               {label}
+//             </a>
+//           ))}
+
+//           <a
+//             href="/admin-login"
+//             className="block text-center underline text-white hover:text-blue-100"
+//           >
+//             Admin Login
+//           </a>
+//         </div>
+//       )}
+//     </nav>
+//   );
+// };
+
+// export default Navigation;
