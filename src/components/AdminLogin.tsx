@@ -10,6 +10,8 @@ const AdminLogin: React.FC = () => {
   const allowedAdmins = [
     "blueimpulseemployer@gmail.com",
     "admin2@gmail.com",
+    "itwalkintest1@gmail.com",
+
   ];
 
   // ✅ Handle Google Login
