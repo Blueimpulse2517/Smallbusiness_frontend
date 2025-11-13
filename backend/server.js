@@ -18,6 +18,12 @@ app.use(cors(corsOptions));
 // Important: Add this line so backend can parse JSON from frontend requests
 app.use(express.json());
 
+// ✅ Log every incoming request (add it right here)
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
+
 // Use your email routes
 app.use("/email", emailRoutes);
 

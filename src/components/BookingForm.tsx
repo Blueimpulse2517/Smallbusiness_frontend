@@ -23,7 +23,7 @@ const BookingForm = () => {
     }
   };
 
-  const baseUrl = "http://localhost:5000";
+  const baseUrl = "https://www.blueimpulse.in/";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
