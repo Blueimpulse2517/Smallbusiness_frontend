@@ -20,7 +20,7 @@ const Navigation: React.FC<NavigationProps> = ({ scrollToSection }) => {
     { label: "Contact", id: "contact" },
   ];
 
-  const whatsappNumber = "911234567898";
+  const whatsappNumber = "98453 61085";
 
   // ✅ Navigate to dashboard if logged in, else login
   const handleAdminClick = () => {
