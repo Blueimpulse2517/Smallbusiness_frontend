@@ -1,121 +1,83 @@
-# Email Setup Guide for Hotel Booking System
+# Email Setup Guide (Local + Production)
 
-## Problem Fixed
-The hotel owner was not receiving email notifications when customers made bookings. This has been fixed by:
+This project has a Vite/React frontend and an Express backend (`backend/`). Emails work in development because both services run locally, but production requires an explicit SMTP configuration and a public backend URL that the frontend can call.
 
-1. ✅ Creating proper environment configuration
-2. ✅ Improving error handling in email controller
-3. ✅ Adding owner notification functionality
-4. ✅ Updating frontend to show email status
+---
 
-## Setup Instructions
+## 1. Backend Environment Variables
 
-### 1. Configure Email Settings
-
-Edit the `backend/.env` file with your actual email credentials:
+Create `backend/.env` with the exact values used in the working local setup, then add **the same env vars** to your hosting provider (Render, Railway, etc.). Example:
 
 ```env
-# Email Configuration
+# SMTP configuration
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 SMTP_MAIL=your-email@gmail.com
 SMTP_PASSWORD=your-app-password
 ADMIN_EMAIL=hotel-owner@gmail.com
 
-# Server Configuration
+# Server configuration
 PORT=5000
 ```
 
-### 2. Gmail Setup (Recommended)
+> **Why?** The controller reads `process.env.SMTP_*` and `process.env.ADMIN_EMAIL`. If any are missing in production, `nodemailer` fails silently and emails never send.
 
-1. **Enable 2-Factor Authentication** on your Gmail account
-2. **Generate an App Password**:
-   - Go to Google Account settings
-   - Security → 2-Step Verification → App passwords
-   - Generate a new app password for "Mail"
-   - Use this password in `SMTP_PASSWORD`
+### Gmail Notes
+1. Enable 2FA on the Gmail account.
+2. Generate an App Password (Google Account → Security → 2-Step Verification → App Passwords).
+3. Use that 16-character app password in `SMTP_PASSWORD`.
 
-### 3. Alternative Email Providers
+### Other Providers
+- Outlook: `SMTP_HOST=smtp-mail.outlook.com`
+- Yahoo: `SMTP_HOST=smtp.mail.yahoo.com`
+- Use TLS ports 587 or 465 depending on provider (set `secure` flag accordingly if you switch to 465).
 
-You can use other email providers by changing the SMTP settings:
+---
 
-**Outlook/Hotmail:**
+## 2. Production Backend Checklist
+1. **Deploy** the Express server somewhere public (Render, Railway, VPS, etc.).
+2. **Set env vars** in that platform’s dashboard using the same keys as `.env`.
+3. **Trigger a redeploy/restart** so the new env vars load.
+4. (Optional) Add logging in `emailControllers.js` to confirm `process.env` values are present—but never log the password.
+
+---
+
+## 3. Frontend → Backend URL
+
+The frontend currently defaults to `window.location.origin`. On Vercel this points to the static site (`https://www.blueimpulse.in`) which doesn’t host the API. Set `VITE_API_BASE_URL` so the SPA calls your deployed backend:
+
 ```env
-SMTP_HOST=smtp-mail.outlook.com
-SMTP_PORT=587
+# frontend/.env
+VITE_API_BASE_URL=https://your-backend-domain.com
 ```
 
-**Yahoo:**
-```env
-SMTP_HOST=smtp.mail.yahoo.com
-SMTP_PORT=587
-```
+Add the same variable in Vercel Project Settings → Environment Variables, then redeploy the frontend.
 
-### 4. Test the Setup
+---
 
-1. Start the backend server:
-   ```bash
-   cd backend
-   npm start
-   ```
+## 4. End-to-End Test Plan
+1. **Local**: `cd backend && npm start`; in another terminal `npm run dev`. Submit a booking → verify two emails (customer + admin).
+2. **Production**:
+   - Visit `https://your-backend-domain.com/email/handleSubmit` with `curl -I`. Expect `404`/`405` (means server is reachable); avoid `DEPLOYMENT_NOT_FOUND`.
+   - On `https://www.blueimpulse.in`, open DevTools Network, submit the booking. Confirm POST goes to your backend host and returns 200.
+   - Check both inboxes.
 
-2. Start the frontend:
-   ```bash
-   npm run dev
-   ```
+---
 
-3. Make a test booking and check:
-   - Customer receives confirmation email
-   - Owner receives notification email
+## 5. Troubleshooting Matrix
+| Symptom | Likely Cause | Fix |
+| --- | --- | --- |
+| `DEPLOYMENT_NOT_FOUND` | Frontend still calling Vercel host | Update `VITE_API_BASE_URL` |
+| `Missing request body` | Backend not receiving JSON | Ensure `express.json()` is before routes (already done) |
+| `Authentication failed` | Wrong SMTP password or 2FA missing | Regenerate Gmail app password |
+| Customer email only | `ADMIN_EMAIL` missing/typo | Set correct admin address |
+| No emails | SMTP env vars absent in production | Recreate `.env` entries in hosting dashboard |
 
-## What's Fixed
+---
 
-### Backend Improvements
-- ✅ Added proper error handling for email sending
-- ✅ Both customer and owner emails are sent
-- ✅ Detailed response messages indicate email status
-- ✅ Environment variable validation
+## 6. Key Files
+- `backend/controllers/emailControllers.js` – Nodemailer transporter and send logic.
+- `backend/server.js` – Express setup + CORS.
+- `src/components/BookingForm.tsx` – Calls `POST /email/handleSubmit` using `VITE_API_BASE_URL`.
 
-### Frontend Improvements
-- ✅ Better user feedback showing email status
-- ✅ Clear indication if owner notification failed
-- ✅ Improved error messages
-
-### Email Flow
-1. **Customer books** → Form submitted
-2. **Customer email** → Confirmation sent to customer
-3. **Owner email** → Notification sent to hotel owner
-4. **User feedback** → Shows status of both emails
-
-## Troubleshooting
-
-### Common Issues
-
-1. **"Email configuration error"**
-   - Check that `.env` file exists in `backend/` directory
-   - Verify all required variables are set
-
-2. **"Authentication failed"**
-   - Check Gmail app password is correct
-   - Ensure 2FA is enabled on Gmail account
-
-3. **"Owner notification failed"**
-   - Check `ADMIN_EMAIL` is set correctly
-   - Verify the email address is valid
-
-4. **Emails not sending**
-   - Check internet connection
-   - Verify SMTP settings for your email provider
-   - Check spam folder
-
-### Testing Email Configuration
-
-You can test the email setup by making a booking through the website. The system will now show you exactly which emails were sent successfully.
-
-## Files Modified
-
-- `backend/.env` - Email configuration (created)
-- `backend/controllers/emailControllers.js` - Improved error handling
-- `src/components/BookingForm.tsx` - Better user feedback
-
-The hotel owner will now receive email notifications for every booking! 🎉
+With the environment mirrored in production (SMTP vars + API base URL), emails will send just like they do locally. 🎉

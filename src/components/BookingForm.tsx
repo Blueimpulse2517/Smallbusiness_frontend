@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Calendar, User, Mail, ChevronDown } from 'lucide-react';
 
 const BookingForm = () => {
@@ -23,7 +23,20 @@ const BookingForm = () => {
     }
   };
 
-  const baseUrl = "https://www.blueimpulse.in";
+  const apiBaseUrl = useMemo(() => {
+    const metaEnv = ((import.meta as unknown as { env?: Record<string, string> })
+      ?.env) || {};
+
+    if (metaEnv.VITE_API_BASE_URL) {
+      return metaEnv.VITE_API_BASE_URL;
+    }
+
+    if (metaEnv.DEV === "true") {
+      return "http://localhost:5000";
+    }
+
+    return typeof window !== "undefined" ? window.location.origin : "";
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,7 +81,13 @@ Hotel Management Team
     };
 
     try {
-      const res = await fetch(`${baseUrl}/email/handleSubmit`, {
+      if (!apiBaseUrl) {
+        throw new Error(
+          "Missing API base URL. Set VITE_API_BASE_URL or provide a proxy."
+        );
+      }
+
+      const res = await fetch(`${apiBaseUrl}/email/handleSubmit`, {
         method: "POST",
         body: JSON.stringify(emailData),
         headers: {
@@ -77,22 +96,36 @@ Hotel Management Team
         },
       });
 
-      let responseData;
-      try {
-        responseData = await res.json();
-      } catch (parseError) {
-        const text = await res.text();
-        console.error("Non-JSON response from server:", text);
-        alert("❌ Server error. Please try again later.");
+      const rawBody = await res.text();
+
+      let responseData: Record<string, any> | null = null;
+
+      if (rawBody) {
+        try {
+          responseData = JSON.parse(rawBody);
+        } catch (parseError) {
+          console.error("Failed to parse JSON response:", rawBody);
+        }
+      }
+
+      const parsedData = responseData ?? {};
+
+      if (!res.ok) {
+        const errorMessage =
+          parsedData.message ||
+          "❌ Error submitting booking: Please try again later.";
+
+        console.error("Booking error response:", parsedData || rawBody);
+        alert(errorMessage);
         return;
       }
 
       if (res.ok) {
-        if (responseData.customerEmailSent && responseData.adminEmailSent) {
+        if (parsedData.customerEmailSent && parsedData.adminEmailSent) {
           alert("🎉 Booked Successfully! 🎉\n\n✅ Confirmation email sent to you\n✅ Owner notification sent\n\nYour booking has been confirmed!");
-        } else if (responseData.customerEmailSent) {
+        } else if (parsedData.customerEmailSent) {
           alert("🎉 Booked Successfully! 🎉\n\n✅ Confirmation email sent to you\n⚠️ Owner notification failed - please contact hotel directly\n\nYour booking has been confirmed!");
-        } else if (responseData.adminEmailSent) {
+        } else if (parsedData.adminEmailSent) {
           alert("🎉 Booked Successfully! 🎉\n\n⚠️ Confirmation email failed - please check your email address\n✅ Owner has been notified\n\nYour booking has been confirmed!");
         } else {
           alert("🎉 Booked Successfully! 🎉\n\n⚠️ Email notifications failed - please contact hotel directly\n\nYour booking has been confirmed!");
@@ -106,8 +139,6 @@ Hotel Management Team
           checkOut: '',
           roomType: '',
         });
-      } else {
-        alert(`❌ Error submitting booking: ${responseData.message || 'Please try again.'}`);
       }
     } catch (error) {
       console.error('Booking error:', error);
